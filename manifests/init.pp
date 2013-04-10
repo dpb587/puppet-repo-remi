@@ -1,4 +1,4 @@
-class repo-remi::yum {
+class repo-remi {
     file {
         '/etc/pki/rpm-gpg/RPM-GPG-KEY-remi' :
             content => '-----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -40,6 +40,9 @@ gC5ns/82kSprzBOU0BNwUeXZAJ0cvNmY7rvbyiJydyLsSxh/la6HKw==
             gpgcheck => '1',
             gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi',
             failovermethod => 'priority',
+            require => [
+                File['/etc/pki/rpm-gpg/RPM-GPG-KEY-remi'],
+            ],
             ;
         'remi-test' :
             descr => 'Les RPM de remi en test pour Enterprise Linux $releasever - $basearch',
@@ -48,12 +51,9 @@ gC5ns/82kSprzBOU0BNwUeXZAJ0cvNmY7rvbyiJydyLsSxh/la6HKw==
             enabled => '0',
             gpgcheck => '1',
             gpgkey => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-remi',
+            require => [
+                File['/etc/pki/rpm-gpg/RPM-GPG-KEY-remi'],
+            ],
             ;
     }
-}
-
-class {
-    'repo-remi::yum':
-        stage => 'pre-main',
-        ;
 }
